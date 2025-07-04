@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Evento de Teclado</title>
+  <style>
+    #cuadro {
+      width: 100px;
+      height: 100px;
+      background-color: cornflowerblue;
+      position: absolute;
+      top: 100px;
+      left: 100px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cuadro"></div>
+
+  <script>
+    const cuadro = document.getElementById('cuadro');
+    let x = 100;
+    let y = 100;
+    const paso = 20;
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowUp') y -= paso;
+      if (event.key === 'ArrowDown') y += paso;
+      if (event.key === 'ArrowLeft') x -= paso;
+      if (event.key === 'ArrowRight') x += paso;
+
+      cuadro.style.left = x + 'px';
+      cuadro.style.top = y + 'px';
+    });
+  </script>
+
+</body>
+</html>
