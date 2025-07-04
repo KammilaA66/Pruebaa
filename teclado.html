@@ -2,36 +2,122 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Evento de Teclado</title>
+  <title>Juego con Teclado</title>
   <style>
-    #cuadro {
-      width: 100px;
-      height: 100px;
-      background-color: cornflowerblue;
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f0f0f0;
+    }
+
+    #juego {
+      width: 600px;
+      height: 400px;
+      margin: 30px auto;
+      background-color: #e0f7fa;
+      border: 2px solid #00838f;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #jugador, #tesoro {
+      width: 40px;
+      height: 40px;
       position: absolute;
-      top: 100px;
-      left: 100px;
+    }
+
+    #jugador {
+      background-color: #2196f3;
+      top: 0;
+      left: 0;
+    }
+
+    #tesoro {
+      background-color: gold;
+      border-radius: 50%;
+      top: 200px;
+      left: 300px;
+    }
+
+    #puntos {
+      text-align: center;
+      font-size: 20px;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
 
-  <div id="cuadro"></div>
+  <div id="juego">
+    <div id="jugador"></div>
+    <div id="tesoro"></div>
+  </div>
+  <div id="puntos">Puntos: 0</div>
 
   <script>
-    const cuadro = document.getElementById('cuadro');
-    let x = 100;
-    let y = 100;
+    const jugador = document.getElementById('jugador');
+    const tesoro = document.getElementById('tesoro');
+    const puntosTexto = document.getElementById('puntos');
+    const juego = document.getElementById('juego');
+
+    let x = 0, y = 0;
+    let puntos = 0;
     const paso = 20;
+    const maxX = juego.clientWidth - jugador.clientWidth;
+    const maxY = juego.clientHeight - jugador.clientHeight;
 
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowUp') y -= paso;
-      if (event.key === 'ArrowDown') y += paso;
-      if (event.key === 'ArrowLeft') x -= paso;
-      if (event.key === 'ArrowRight') x += paso;
+    function moverJugador(dx, dy) {
+      x = Math.min(Math.max(x + dx, 0), maxX);
+      y = Math.min(Math.max(y + dy, 0), maxY);
+      jugador.style.left = x + 'px';
+      jugador.style.top = y + 'px';
+      detectarColision();
+    }
 
-      cuadro.style.left = x + 'px';
-      cuadro.style.top = y + 'px';
+    function detectarColision() {
+      const jugadorRect = jugador.getBoundingClientRect();
+      const tesoroRect = tesoro.getBoundingClientRect();
+
+      const colision = !(
+        jugadorRect.right < tesoroRect.left ||
+        jugadorRect.left > tesoroRect.right ||
+        jugadorRect.bottom < tesoroRect.top ||
+        jugadorRect.top > tesoroRect.bottom
+      );
+
+      if (colision) {
+        puntos++;
+        puntosTexto.textContent = "Puntos: " + puntos;
+        moverTesoro();
+      }
+    }
+
+    function moverTesoro() {
+      const nuevoX = Math.floor(Math.random() * (maxX + 1));
+      const nuevoY = Math.floor(Math.random() * (maxY + 1));
+      tesoro.style.left = nuevoX + 'px';
+      tesoro.style.top = nuevoY + 'px';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case 'ArrowUp':
+          moverJugador(0, -paso);
+          break;
+        case 'ArrowDown':
+          moverJugador(0, paso);
+          break;
+        case 'ArrowLeft':
+          moverJugador(-paso, 0);
+          break;
+        case 'ArrowRight':
+          moverJugador(paso, 0);
+          break;
+      }
     });
   </script>
 
