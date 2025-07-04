@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ratón - Círculos al Hacer Clic</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #eef;
+      position: relative;
+      overflow: hidden;
+    }
+    .circulo {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    document.addEventListener('click', (e) => {
+      const circulo = document.createElement('div');
+      circulo.classList.add('circulo');
+      circulo.style.left = e.pageX - 15 + 'px';
+      circulo.style.top = e.pageY - 15 + 'px';
+      circulo.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+      document.body.appendChild(circulo);
+    });
+  </script>
+
+</body>
+</html>
